@@ -58,11 +58,25 @@ exports.create = function (req, res, next) {
 * READ
 **/
 exports.list = function(req, res, next) {
-  Entry.find({}, function(err, entries) {
+  /*Entry.find({}, function(err, entries) {
     if (err) {
       return next(err);
     }
     else {
+      res.json(entries);
+    }
+  });*/
+  Entry.find({}).sort({date : 1}).exec(function(err, entries) {
+    if (err) {
+      return next(err);
+    }
+    else {
+      var balance = 10000;
+      for (var i = 0; i < entries.length; i++) {
+        balance = balance - entries[i].amount;
+        console.log(('Created the balance ' + balance).debug);
+        entries[i].balance = balance;
+      }
       res.json(entries);
     }
   });

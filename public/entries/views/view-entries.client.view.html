@@ -22,17 +22,11 @@
 
 
   <h1>Entries</h1>
-  <!--ul>
-    <li data-ng-repeat="entry in entries">
-      <h3 data-ng-bind = "entry.source"></h3>
-      <small data-ng-bind = "entry.amount"></small>
-      <p data-ng-bind = "entry.notes"></p>
-    </li>
-  </ul-->
   <table>
     <tr>
       <th>Source</th>
-      <th>Amount</th>
+      <th>Debit</th>
+      <th>Credit</th>
       <th>Balance</th>
       <th>Date</th>
       <th>Est</th>
@@ -40,10 +34,11 @@
     </tr>
     <tr ng-repeat = "entry in entries">
       <td>{{ entry.source }}</td>
-      <td>{{ entry.amount }}</td>
+      <td>{{ entry.amount > 0 ? entry.amount : ''}}</td>
+      <td>{{ entry.amount <= 0 ? (entry.amount | abs) : ''}}</td>
       <td>{{ entry.balance }}</td>
-      <td>{{ entry.date }}</td>
-      <td>{{ entry.estimate }}</td>
+      <td>{{ entry.date | formatDate }}</td>
+      <td>{{ entry.estimate ? 'Y' : '' }}</td>
       <td>{{ entry.notes }}</td>
     </tr>
   </table>
