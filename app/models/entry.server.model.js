@@ -6,20 +6,22 @@ var EntrySchema = new Schema({
   amount : Number,
   date : {
     type : Date,
+    default : Date.now
+    //TODO: May want to add a setter in here to zero out the Time
   },
   estimate : Boolean,
   notes : String
 });
 
-EntrySchema.pre('save', function(next) {
-  if (!this.date) {
-    this.date = Date.now();
-  }
-  this.date.setHours(0);
-  this.date.setMinutes(0);
-  this.date.setSeconds(0);
-  this.date.setMilliseconds(0);
-  next();
-});
+/* Virtual property that we'll use to hold the calculated balance */
+EntrySchema.virtual('balance')
+  .get(function() {
+    return this.__balance;
+  })
+  .set(function(balance) {
+    this.__balance = balance;
+  });
+
+EntrySchema.set('toJSON', { getters: true, virtuals: true });
 
 mongoose.model('Entry', EntrySchema);
