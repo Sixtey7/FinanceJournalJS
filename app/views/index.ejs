@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:ng = "http://angularjs.org">
+  <head>
+    <title><%= title %></title>
+  </head>
+  <body>
+    <section ng-view></section>
+
+    <!-- Add in the dependencies -->
+    <script type = "text/javascript"
+      src = "lib/angular/angular.js"></script>
+
+    <script type = "text/javascript"
+      src = "lib/angular-route/angular-route.js"></script>
+
+    <script type = "text/javascript"
+      src = "lib/angular-resource/angular-resource.js"></script>
+
+    <!-- Add in the resources for entries -->
+    <script type = "text/javascript"
+      src = "/entries/entries.client.module.js"></script>
+
+    <script type = "text/javascript"
+      src = "/entries/config/entries.client.routes.js"></script>
+
+    <script type = "text/javascript"
+      src = "/entries/controllers/entries.client.controller.js"></script>
+
+    <script type = "text/javascript"
+      src = "/entries/services/entries.client.service.js"></script>
+
+    <!-- add in the Application.js -->
+    <script type = "text/javascript"
+      src = "application.js"></script>
+
+  </body>
+</html>

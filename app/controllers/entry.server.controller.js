@@ -43,6 +43,7 @@ exports.create = function (req, res, next) {
 
   console.log(('Create got the entry: ' + JSON.stringify(req.body)).debug);
 
+  console.log(('Created the entry: '  + JSON.stringify(entry)).debug);
   entry.save(function(err) {
     if (err) {
       return next(err);

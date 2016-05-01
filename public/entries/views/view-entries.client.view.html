@@ -1,0 +1,39 @@
+<section data-ng-controller="EntriesController" data-ng-init="find()">
+
+  <style>
+    table, th , td {
+      border: 1px solid grey;
+      border-collapse: collapse;
+      padding: 5px;
+    }
+    table tr:nth-child(odd) {
+      background-color: #f1f1f1;
+    }
+    table tr:nth-child(even) {
+      background-color: #ffffff;
+    }
+</style>
+
+
+  <h1>Entries</h1>
+  <!--ul>
+    <li data-ng-repeat="entry in entries">
+      <h3 data-ng-bind = "entry.source"></h3>
+      <small data-ng-bind = "entry.amount"></small>
+      <p data-ng-bind = "entry.notes"></p>
+    </li>
+  </ul-->
+  <table>
+    <tr>
+      <th>Source</th>
+      <th>Amount</th>
+    </tr>
+    <tr ng-repeat = "entry in entries">
+      <td>{{ entry.source }}</td>
+      <td>{{ entry.amount }}</td>
+    </tr>
+  </table>
+  <div data-ng-hide="!entries || entries.length">
+    <h2>No Entries Found!</h2>
+  </div>
+</section>

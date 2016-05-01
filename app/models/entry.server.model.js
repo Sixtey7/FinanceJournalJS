@@ -2,7 +2,6 @@ var mongoose = require('mongoose'),
 Schema = mongoose.Schema;
 
 var EntrySchema = new Schema({
-  entry : Schema.ObjectId,
   source : String,
   amount : Number,
   date : {
