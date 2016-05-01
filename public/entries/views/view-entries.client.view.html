@@ -18,31 +18,74 @@
       font-weight : bold;
 
     }
-</style>
+  </style>
 
+  <div id="entryTableDiv">
+    <h1>Entries</h1>
+    <table>
+      <tr>
+        <th>Source</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        <th>Date</th>
+        <th>Est</th>
+        <th>Notes</th>
+      </tr>
+      <tr ng-repeat = "entry in entries">
+        <td>{{ entry.source }}</td>
+        <td>{{ entry.amount > 0 ? entry.amount : ''}}</td>
+        <td>{{ entry.amount <= 0 ? (entry.amount | abs) : ''}}</td>
+        <td>{{ entry.balance }}</td>
+        <td>{{ entry.date | formatDate }}</td>
+        <td>{{ entry.estimate ? 'Y' : '' }}</td>
+        <td>{{ entry.notes }}</td>
+      </tr>
+    </table>
+    <div data-ng-hide="!entries || entries.length">
+      <h2>No Entries Found!</h2>
+    </div>
+  </div>
 
-  <h1>Entries</h1>
-  <table>
-    <tr>
-      <th>Source</th>
-      <th>Debit</th>
-      <th>Credit</th>
-      <th>Balance</th>
-      <th>Date</th>
-      <th>Est</th>
-      <th>Notes</th>
-    </tr>
-    <tr ng-repeat = "entry in entries">
-      <td>{{ entry.source }}</td>
-      <td>{{ entry.amount > 0 ? entry.amount : ''}}</td>
-      <td>{{ entry.amount <= 0 ? (entry.amount | abs) : ''}}</td>
-      <td>{{ entry.balance }}</td>
-      <td>{{ entry.date | formatDate }}</td>
-      <td>{{ entry.estimate ? 'Y' : '' }}</td>
-      <td>{{ entry.notes }}</td>
-    </tr>
-  </table>
-  <div data-ng-hide="!entries || entries.length">
-    <h2>No Entries Found!</h2>
+  <div id="entryEntryForm">
+    <h1>Enter New Entry</h1>
+    <form data-ng-submit="create()" novalidate>
+      <div>
+        <label for="source">Source</label>
+        <div>
+          <input type="text" data-ng-model="source" id="source" placeholder="Source" required />
+        </div>
+      </div>
+      <div>
+        <label for="amount">Amount</label>
+        <div>
+          <input type="number" data-ng-model="amount" id="amount" placeholder="0" required/>
+        </div>
+      </div>
+      <div>
+        <label for="date">Date</label>
+        <div>
+          <input type="date" data-ng-model="date" id="date" required/>
+        </div>
+      </div>
+      <div>
+        <label for="estimate">Estimate</label>
+        <div>
+          <input type="checkbox" data-ng-model="estimate" id="estimate" required/>
+        </div>
+      </div>
+      <div>
+        <label for="notes">Notes</label>
+        <div>
+          <textarea data-ng-model="notes" id="notes" cols="30" rows="10" placeholder=""></textarea>
+        </div>
+      </div>
+      <div>
+        <input type="submit"/>
+      </div>
+      <div data-ng-show="error">
+        <strong data-ng-bind="error"></strong>
+      </div>
+  </form>
   </div>
 </section>

@@ -14,7 +14,9 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
       });
 
       entry.$save(function(response) {
-        $location.path('entries/' + response._id);
+        /** TODO: There's probably a better way to do the refresh here, like tell angular
+        to requery its dataset, but fuck if I know how **/
+        $location.path('entries/')
       }, function(errorResponse) {
         $scope.error = errorResponse.data.message;
       });
