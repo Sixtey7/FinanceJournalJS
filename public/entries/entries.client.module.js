@@ -1,1 +1,1 @@
-angular.module('entries', []);
+angular.module('entries', ['ngMaterial', 'md.data.table']);
