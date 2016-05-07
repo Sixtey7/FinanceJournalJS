@@ -1,6 +1,6 @@
 <section data-ng-controller="EntriesController" data-ng-init="find()">
 
-  <style>
+  <!--style>
     table, th , td {
       border: 1px solid grey;
       border-collapse: collapse;
@@ -18,11 +18,10 @@
       font-weight : bold;
 
     }
-  </style>
-
-  <div id="entryTableDiv">
-    <h1>Entries</h1>
-    <table>
+  </style-->
+<md-table-container>
+  <table md-table>
+    <thead md-head>
       <tr>
         <th>Source</th>
         <th>Debit</th>
@@ -32,6 +31,8 @@
         <th>Est</th>
         <th>Notes</th>
       </tr>
+    </thead>
+    <tbody md-body>
       <tr ng-repeat = "entry in entries">
         <td>{{ entry.source }}</td>
         <td>{{ entry.amount > 0 ? entry.amount : ''}}</td>
@@ -41,11 +42,9 @@
         <td>{{ entry.estimate ? 'Y' : '' }}</td>
         <td>{{ entry.notes }}</td>
       </tr>
-    </table>
-    <div data-ng-hide="!entries || entries.length">
-      <h2>No Entries Found!</h2>
-    </div>
-  </div>
+    </tbody>
+  </table>
+</md-table-container>
 
   <div id="entryEntryForm">
     <h1>Enter New Entry</h1>
