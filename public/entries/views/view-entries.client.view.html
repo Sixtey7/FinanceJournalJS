@@ -41,17 +41,19 @@
         <th md-column md-numeric><span>Balance</span></th>
         <th md-column><span>Date</span></th>
         <th md-column><span>Est</span></th>
+        <th md-column><span>Plan</span></th>
         <th md-column><span>Notes</span></th>
       </tr>
     </thead>
     <tbody md-body>
       <tr  md-row ng-repeat = "entry in entries">
         <td md-cell>{{ entry.source }}</td>
-        <td md-cell>{{ entry.amount > 0 ? (entry.amount | currency) : ''}}</td>
-        <td md-cell>{{ entry.amount <= 0 ? ((entry.amount | abs) | currency) : ''}}</td>
-        <td md-cell>{{ entry.balance | currency }}</td>
+        <td md-cell>{{ entry.amount > 0 ? (entry.amount | number : 2) : ''}}</td>
+        <td md-cell>{{ entry.amount <= 0 ? ((entry.amount | abs) | number : 2) : ''}}</td>
+        <td md-cell>{{ entry.balance | number : 2 }}</td>
         <td md-cell>{{ entry.date | formatDate }}</td>
         <td md-cell>{{ entry.estimate ? 'Y' : '' }}</td>
+        <td md-cell>{{ entry.planned ? 'Y' : '' }}</td>
         <td md-cell>{{ entry.notes }}</td>
       </tr>
     </tbody>
@@ -79,6 +81,7 @@
       </div>
       <div>
           <md-checkbox ng-model="estimate" id="estimate">Estimate</md-checkbox>
+          <md-checkbox ng-model="planned" id="planned">Planned</md-checkbox>
       </div>
       <md-input-container class="md-block flex-gt-sm">
         <label for="notes">Notes</label>

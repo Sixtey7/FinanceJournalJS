@@ -78,7 +78,8 @@ console.log(JSON.stringify(req.body));
       ** 2 - Credit
       ** 3 - Date
       ** 4 - Estimate
-      ** 5 - Notes
+      ** 5 - Planned
+      ** 6 - Notes
       **/
       //first we need to determine the amount (positive or negative)
       var amount = 0;
@@ -108,7 +109,8 @@ console.log(JSON.stringify(req.body));
         amount : amount,
         date : date,
         estimate : values[4],
-        notes : values[5]
+        planned : values[5],
+        notes : values[6]
       });
 
       entry.save();

@@ -10,6 +10,7 @@ var EntrySchema = new Schema({
     //TODO: May want to add a setter in here to zero out the Time
   },
   estimate : Boolean,
+  planned : Boolean,
   notes : String
 });
 
