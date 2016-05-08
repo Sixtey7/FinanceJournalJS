@@ -10,6 +10,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         amount : this.amount,
         date : this.date,
         estimate : this.estimate,
+        planned : this.planned,
         notes : this.notes
       });
 
