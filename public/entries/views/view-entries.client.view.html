@@ -1,5 +1,12 @@
-<section data-ng-controller="EntriesController" data-ng-init="find()">
+<section data-ng-controller="EntriesController" data-ng-init="find()" class="md-padding" ng-cloak>
 
+  <style>
+    /*table, th , td {
+      border: 1px solid grey;
+      border-collapse: collapse;
+      padding: 5px;
+    }*/
+  </style>
   <!--style>
     table, th , td {
       border: 1px solid grey;
@@ -19,72 +26,73 @@
 
     }
   </style-->
+  <md-toolbar class="md-info">
+      <div class="md-toolbar-tools">
+        <h2 class="md-flex">Entries</h2>
+      </div>
+    </md-toolbar>
 <md-table-container>
   <table md-table>
     <thead md-head>
       <tr>
-        <th>Source</th>
-        <th>Debit</th>
-        <th>Credit</th>
-        <th>Balance</th>
-        <th>Date</th>
-        <th>Est</th>
-        <th>Notes</th>
+        <th md-column><span>Source</span></th>
+        <th md-column md-numeric><span>Debit</span></th>
+        <th md-column md-numeric><span>Credit</span></th>
+        <th md-column md-numeric><span>Balance</span></th>
+        <th md-column><span>Date</span></th>
+        <th md-column><span>Est</span></th>
+        <th md-column><span>Notes</span></th>
       </tr>
     </thead>
     <tbody md-body>
-      <tr ng-repeat = "entry in entries">
-        <td>{{ entry.source }}</td>
-        <td>{{ entry.amount > 0 ? entry.amount : ''}}</td>
-        <td>{{ entry.amount <= 0 ? (entry.amount | abs) : ''}}</td>
-        <td>{{ entry.balance }}</td>
-        <td>{{ entry.date | formatDate }}</td>
-        <td>{{ entry.estimate ? 'Y' : '' }}</td>
-        <td>{{ entry.notes }}</td>
+      <tr  md-row ng-repeat = "entry in entries">
+        <td md-cell>{{ entry.source }}</td>
+        <td md-cell>{{ entry.amount > 0 ? (entry.amount | currency) : ''}}</td>
+        <td md-cell>{{ entry.amount <= 0 ? ((entry.amount | abs) | currency) : ''}}</td>
+        <td md-cell>{{ entry.balance | currency }}</td>
+        <td md-cell>{{ entry.date | formatDate }}</td>
+        <td md-cell>{{ entry.estimate ? 'Y' : '' }}</td>
+        <td md-cell>{{ entry.notes }}</td>
       </tr>
     </tbody>
   </table>
 </md-table-container>
 
   <div id="entryEntryForm">
+    <md-content>
     <h1>Enter New Entry</h1>
     <form data-ng-submit="create()" novalidate>
-      <div>
-        <label for="source">Source</label>
-        <div>
-          <input type="text" data-ng-model="source" id="source" placeholder="Source" required />
-        </div>
+      <div layout-gt-xs="row">
+        <md-input-container class="md-block">
+          <label for="source">Source</label>
+          <div>
+            <input type="text" ng-model="source" id="source" placeholder="Source" md-maxlength="15" required />
+          </div>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label for="amount">Amount</label>
+          <div>
+            <input type="number" ng-model="amount" id="amount" placeholder="0" min="-9999" max="99999" required />
+          </div>
+        </md-input-container>
+        <md-datepicker type="date" ng-model="date" id="date" md-placeholder="Date" required></md-datepicker>
       </div>
       <div>
-        <label for="amount">Amount</label>
-        <div>
-          <input type="number" data-ng-model="amount" id="amount" placeholder="0" required/>
-        </div>
+          <md-checkbox ng-model="estimate" id="estimate">Estimate</md-checkbox>
       </div>
-      <div>
-        <label for="date">Date</label>
-        <div>
-          <input type="date" data-ng-model="date" id="date" required/>
-        </div>
-      </div>
-      <div>
-        <label for="estimate">Estimate</label>
-        <div>
-          <input type="checkbox" data-ng-model="estimate" id="estimate" required/>
-        </div>
-      </div>
-      <div>
+      <md-input-container class="md-block flex-gt-sm">
         <label for="notes">Notes</label>
         <div>
-          <textarea data-ng-model="notes" id="notes" cols="30" rows="10" placeholder=""></textarea>
+          <input type="text" ng-model="notes" id="notes" md-maxlength="50" placeholder="" />
         </div>
-      </div>
+      </md-input-container>
       <div>
-        <input type="submit"/>
+        <md-button class="md-raised md-primary" ng-click="create()">Submit</md-button>
       </div>
       <div data-ng-show="error">
         <strong data-ng-bind="error"></strong>
       </div>
   </form>
+</md-content>
   </div>
 </section>
