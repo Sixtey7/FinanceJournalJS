@@ -6,6 +6,8 @@
       border-collapse: collapse;
       padding: 5px;
     }*/
+
+}
   </style>
   <!--style>
     table, th , td {
@@ -26,13 +28,21 @@
 
     }
   </style-->
-  <md-toolbar class="md-info">
-      <div class="md-toolbar-tools">
-        <h2 class="md-flex">Entries</h2>
-      </div>
-    </md-toolbar>
+<md-button class="md-fab md-primary md-fab-bottom-right" aria-label="Add New">
+  <md-icon>add</md-icon>
+</md-button>
+
+<md-toolbar class = "md-table-toolbar md-info">
+  <div class = "md-toolbar-tools">
+    <span>Entries</span>
+    <div flex></div>
+    <md-button class = "md-icon-button" ng-click="find()">
+      <md-icon>refresh</md-icon>
+    </md-button>
+  </div>
+</md-toolbar>
 <md-table-container>
-  <table md-table>
+  <table md-table md-progress = "promise">
     <thead md-head>
       <tr>
         <th md-column><span>Source</span></th>
