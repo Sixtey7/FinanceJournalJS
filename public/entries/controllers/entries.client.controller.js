@@ -26,8 +26,13 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     /**
     * READ
     **/
+    function success(entries) {
+      $scope.entries = entries;
+    };
+
     $scope.find = function() {
-      $scope.entries = Entries.query();
+      //$scope.entries = Entries.query();
+      $scope.promise = Entries.query($scope.query, success).$promise;
     };
 
     $scope.findOne = function() {

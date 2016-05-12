@@ -136,6 +136,7 @@ exports.list = function(req, res, next) {
       res.json(entries);
     }
   });*/
+
   Entry.find({}).sort({date : 1}).exec(function(err, entries) {
     if (err) {
       return next(err);
