@@ -1,34 +1,6 @@
 <section data-ng-controller="EntriesController" data-ng-init="find()" class="md-padding" ng-cloak>
 
-  <style>
-    /*table, th , td {
-      border: 1px solid grey;
-      border-collapse: collapse;
-      padding: 5px;
-    }*/
-
-}
-  </style>
-  <!--style>
-    table, th , td {
-      border: 1px solid grey;
-      border-collapse: collapse;
-      padding: 5px;
-    }
-    table tr:nth-child(odd) {
-      background-color: #f1f1f1;
-    }
-    table tr:nth-child(even) {
-      background-color: #ffffff;
-    }
-    table th {
-      background-color : #000000;
-      color : #FFFFFF;
-      font-weight : bold;
-
-    }
-  </style-->
-<md-button class="md-fab md-primary md-fab-bottom-right" aria-label="Add New">
+<md-button class="md-fab md-primary md-fab-bottom-right" aria-label="Add New" ng-click="showNewEntryDialog($event)">
   <md-icon>add</md-icon>
 </md-button>
 
@@ -69,43 +41,4 @@
     </tbody>
   </table>
 </md-table-container>
-
-  <div id="entryEntryForm">
-    <md-content>
-    <h1>Enter New Entry</h1>
-    <form data-ng-submit="create()" novalidate>
-      <div layout-gt-xs="row">
-        <md-input-container class="md-block">
-          <label for="source">Source</label>
-          <div>
-            <input type="text" ng-model="source" id="source" placeholder="Source" md-maxlength="15" required />
-          </div>
-        </md-input-container>
-        <md-input-container class="md-block">
-          <label for="amount">Amount</label>
-          <div>
-            <input type="number" ng-model="amount" id="amount" placeholder="0" min="-9999" max="99999" required />
-          </div>
-        </md-input-container>
-        <md-datepicker type="date" ng-model="date" id="date" md-placeholder="Date" required></md-datepicker>
-      </div>
-      <div>
-          <md-checkbox ng-model="estimate" id="estimate">Estimate</md-checkbox>
-          <md-checkbox ng-model="planned" id="planned">Planned</md-checkbox>
-      </div>
-      <md-input-container class="md-block flex-gt-sm">
-        <label for="notes">Notes</label>
-        <div>
-          <input type="text" ng-model="notes" id="notes" md-maxlength="50" placeholder="" />
-        </div>
-      </md-input-container>
-      <div>
-        <md-button class="md-raised md-primary" ng-click="create()">Submit</md-button>
-      </div>
-      <div data-ng-show="error">
-        <strong data-ng-bind="error"></strong>
-      </div>
-  </form>
-</md-content>
-  </div>
 </section>

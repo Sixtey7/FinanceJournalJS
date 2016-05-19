@@ -1,5 +1,5 @@
-angular.module('entries').controller('EntriesController', ['$scope', '$routeParams', '$location', 'Entries',
-  function($scope, $routeParams, $location, Entries) {
+angular.module('entries').controller('EntriesController', ['$scope', '$routeParams', '$location', '$mdDialog', '$mdMedia', 'Entries',
+  function($scope, $routeParams, $location, $mdDialog, $mdMedia, Entries) {
 
     /**
     * CREATE
@@ -73,5 +73,44 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         });
       }
     };
+
+    /**
+    * Show the filter html
+    **/
+    $scope.showNewEntryDialog = function(ev) {
+      console.log('Show new entry dialog');
+      var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+
+      $mdDialog.show({
+        controller : DialogController,
+        templateUrl : '../entries/views/add-entry.client.view.html',
+        parent : angular.element(document.body),
+        targentEvent : ev,
+        clickOutsideToClose : true,
+        fullscreen : useFullScreen
+      })
+      .then(function(answer) {
+        $scope.status = 'New Entry Added!';
+      }, function() {
+        $scope.status = 'Entry Added Canceled';
+      });
+
+      $scope.$watch(function() {
+        return $mdMedia('xs') || $mdMedia('sm');
+      }, function(wantsFullScreen) {
+        $scope.customFullscreen = (wantsFullScreen === true);
+      });
+    }
   }
 ]);
+function DialogController($scope, $mdDialog) {
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+  };
+}
