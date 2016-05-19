@@ -1,0 +1,35 @@
+<md-dialog aria-label="Add New Entry" ng-cloak data-ng-controller="EntriesController">
+  <form novalidate>
+    <div layout-gt-xs="row">
+      <md-input-container class="md-block">
+        <label for="source">Source</label>
+        <div>
+          <input type="text" ng-model="source" id="source" placeholder="Source" md-maxlength="15" required />
+        </div>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label for="amount">Amount</label>
+        <div>
+          <input type="number" ng-model="amount" id="amount" placeholder="0" min="-9999" max="99999" required />
+        </div>
+      </md-input-container>
+      <md-datepicker type="date" ng-model="date" id="date" md-placeholder="Date" required></md-datepicker>
+    </div>
+    <div>
+        <md-checkbox ng-model="estimate" id="estimate">Estimate</md-checkbox>
+        <md-checkbox ng-model="planned" id="planned">Planned</md-checkbox>
+    </div>
+    <md-input-container class="md-block flex-gt-sm">
+      <label for="notes">Notes</label>
+      <div>
+        <input type="text" ng-model="notes" id="notes" md-maxlength="50" placeholder="" />
+      </div>
+    </md-input-container>
+    <div>
+      <md-button class="md-raised md-primary" ng-click="create()">Submit</md-button>
+    </div>
+    <div data-ng-show="error">
+      <strong data-ng-bind="error"></strong>
+    </div>
+  </form>
+</md-dialog>
