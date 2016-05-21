@@ -1,5 +1,12 @@
 var module = angular.module('entries');
 
+var MONTH_NAMES = [
+  "January", "February", "March",
+  "April", "May", "June", "July",
+  "August", "September", "October",
+  "November", "December"
+];
+
 /**
 * Filter used to take the absolute value of a number
 **/
@@ -31,8 +38,10 @@ module.filter('formatDate', function() {
     console.log('Formatting Date...');
     if (date) {
       //TODO: May want to clean this up a bit to make the date even prettier
-      var splitResults = date.split('T');
-      return splitResults[0];
+      var dateObj = new Date(date);
+
+      return MONTH_NAMES[dateObj.getMonth()] + ' ' + dateObj.getDate();
+
     }
     else {
       return date;
