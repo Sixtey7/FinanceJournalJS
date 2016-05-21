@@ -111,7 +111,8 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     }
 
     /**
-    * Delete the selected element
+    * Prompt the user to confirm that they want to delete the selected element
+    * If so, delete it!  
     **/
     $scope.deleteElement = function(entryToDelete) {
       console.log('User selected to delete: ' + JSON.stringify(entryToDelete));
@@ -142,6 +143,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     };
   }
 ]);
+
 function DialogController($scope, $mdDialog) {
   $scope.hide = function() {
     $mdDialog.hide();
