@@ -25,9 +25,9 @@
         <input type="text" ng-model="notes" id="notes" md-maxlength="50" placeholder="" />
       </div>
     </md-input-container>
-    <div>
-      <md-button class="md-raised md-primary" ng-click="create()">Submit</md-button>
-    </div>
+    <md-dialog-actions layout="row">
+      <md-button class="md-raised md-primary" ng-click="create()" type="submit">Submit</md-button>
+    </md-dialog-actions>
     <div data-ng-show="error">
       <strong data-ng-bind="error"></strong>
     </div>

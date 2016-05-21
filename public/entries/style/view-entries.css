@@ -10,3 +10,18 @@
   padding-left : 1em;
   padding-right : 2em;
 }
+
+/**
+* Format the entry table
+*/
+#entryTableBody input[type="text"] {
+  width: 100px;
+}
+
+#entryTableBody input[type="number"] {
+  width: 50px;
+}
+
+#entryTableBody button {
+  min-width : 0px;
+}
