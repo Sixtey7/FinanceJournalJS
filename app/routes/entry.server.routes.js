@@ -10,7 +10,7 @@ module.exports = function(app) {
 
   app.route('/api/entries/:entryId')
     .get(entry.read)
-    .put(entry.update)
+    .post(entry.update)
     .delete(entry.delete);
 
   app.route('/api/entries/load')

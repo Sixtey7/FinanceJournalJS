@@ -13,6 +13,8 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     * CREATE
     **/
     $scope.create = function() {
+      $mdDialog.hide()
+
       var entry = new Entries({
         source : this.source,
         amount : this.amount,
@@ -25,8 +27,10 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
       entry.$save(function(response) {
         /** TODO: There's probably a better way to do the refresh here, like tell angular
         to requery its dataset, but fuck if I know how **/
-        $location.path('entries/')
+        console.log('Successfully created!');
+        $location.path('entries/');
       }, function(errorResponse) {
+        console.log('Failed on creation!');
         $scope.error = errorResponse.data.message;
       });
     };
@@ -35,6 +39,13 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     * READ
     **/
     function success(entries) {
+      /** TODO: Super temp code **/
+      for (var i = 0; i < entries.length; i++) {
+        entries[i].date = new Date(entries[i].date);
+      }
+      /** TODO: End Super temp code **/
+
+      //Probably less temp code, but temp code nevertheless
       $scope.entries = entries;
     };
 
@@ -44,7 +55,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     };
 
     $scope.findOne = function() {
-      $scope.article = Entries.get({
+      $scope.entry = Entries.get({
         entryId : $routeParams.entryId
       });
     };
@@ -112,7 +123,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
 
     /**
     * Prompt the user to confirm that they want to delete the selected element
-    * If so, delete it!  
+    * If so, delete it!
     **/
     $scope.deleteElement = function(entryToDelete) {
       console.log('User selected to delete: ' + JSON.stringify(entryToDelete));
@@ -131,16 +142,71 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
 
       $mdDialog.show(confirmDeleteDialog).then(function() {
         console.log('Selected To Delete')
-        entryToDelete.$delete(entryToDelete,function() {
-          console.log('Successfully Deleted!');
-          $location.path('entries/')
-        },function() {
-          console.log('Failed To Delete');
-        });
+        entryToDelete.$delete(entryToDelete.id,
+          function() {
+            console.log('Successfully Deleted!');
+            $location.path('entries/');
+          },function() {
+            console.log('Failed To Delete');
+          });
       }, function() {
         console.log('Selected To Keep It Around');
       });
     };
+
+    /**
+    * Make the current row editable
+    * Or save changes if it is already editable
+    **/
+    $scope.editElement = function(entryToEdit) {
+      if (entryToEdit.editable) {
+        console.log('Entry was editable - saving it!');
+        entryToEdit.$save(
+          function() {
+            console.log('Successfully Saved!');
+            $location.path('entries/');
+          },
+          function() {
+            console.log('Failed To Save...');
+          }
+        )
+        entryToEdit.editable = false;
+      }
+      else {
+        console.log('Entry was not editable - changing to editable');
+        entryToEdit.editable = true;
+      }
+    };
+
+    /**
+    * Revert All Changes
+    **/
+    $scope.revertAllChanges = function() {
+      var confirmRevertDialog = $mdDialog.confirm()
+        .title('Confirm Revert')
+        .textContent('Are you sure you want to revert all changes?')
+        .ariaLabel('Confirm Revert')
+        .ok('Revert All!')
+        .cancel('Please Don\'t Revert');
+
+      $mdDialog.show(confirmRevertDialog).then(
+        function() {
+          console.log('Selected To Revert')
+          $location.path('entries/');
+
+        }, function() {
+          console.log('Selected To Not Revert');
+        }
+      );
+    };
+
+    $scope.revertChange = function( entryToRevert ) {
+      var index = $scope.entries.indexOf(entryToRevert);
+      console.log('Got the index: ' + index);
+      $scope.entries[index] = Entries.get({
+        entryId : entryToRevert.id
+      });
+    }
   }
 ]);
 
