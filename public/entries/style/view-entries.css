@@ -1,3 +1,12 @@
 .md-fab.md-primary.md-fab-bottom-right {
   position : fixed;
 }
+
+/**
+ * Slightly off balanced style helps to make it display better and fit in the browser popup
+ */
+
+.pws_popup {
+  padding-left : 1em;
+  padding-right : 2em;
+}

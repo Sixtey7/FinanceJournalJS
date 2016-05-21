@@ -74,30 +74,16 @@ console.log(JSON.stringify(req.body));
       /**
       * Assumed CSV layout:
       ** 0 - Source
-      ** 1 - Debit
-      ** 2 - Credit
-      ** 3 - Date
-      ** 4 - Estimate
-      ** 5 - Planned
-      ** 6 - Notes
+      ** 1 - Amount
+      ** 2 - Date
+      ** 3 - Estimate
+      ** 4 - Planned
+      ** 5 - Notes
       **/
-      //first we need to determine the amount (positive or negative)
-      var amount = 0;
-      if (values[1]) {
-        console.log(('Debit was provided, making amount a negative of that number'));
-        amount = (-1) * values[1];
-      }
-      else if (values[2]){
-          console.log(('Credit was provided (and debit was not), setting value'));
-          amount = values[2];
-      }
-      else {
-        console.log(('Neither credit nor debit was provided!').warn);
-      }
 
       //determine the date
       var date;
-      if (values[3]) {
+      if (values[2]) {
         console.log(('A date was provided, attempting to create an object').debug);
         date = new Date(values[3]);
       }
@@ -106,11 +92,11 @@ console.log(JSON.stringify(req.body));
       }
       var entry = new Entry({
         source : values[0],
-        amount : amount,
+        amount : avalues[1],
         date : date,
-        estimate : values[4],
-        planned : values[5],
-        notes : values[6]
+        estimate : values[3],
+        planned : values[4],
+        notes : values[5]
       });
 
       entry.save();
@@ -144,8 +130,9 @@ exports.list = function(req, res, next) {
     else {
       var balance = 10000;
       for (var i = 0; i < entries.length; i++) {
-        balance = balance - entries[i].amount;
+        balance = balance + entries[i].amount;
         console.log(('Created the balance ' + balance).debug);
+        console.log(('Got the date: ' + entries[i].date));
         entries[i].balance = balance;
       }
       res.json(entries);
