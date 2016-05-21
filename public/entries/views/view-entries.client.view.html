@@ -24,6 +24,7 @@
         <th md-column><span>Est</span></th>
         <th md-column><span>Plan</span></th>
         <th md-column><span>Notes</span></th>
+        <th></th>
       </tr>
     </thead>
     <tbody md-body>
@@ -32,9 +33,14 @@
         <td md-cell>{{ entry.amount | number : 2 }}</td>
         <td md-cell>{{ entry.balance | number : 2 }}</td>
         <td md-cell>{{ entry.date | formatDate }}</td>
-        <td md-cell><div ng-if = "entry.estimate"><md-icon>done</md-icon></div></td>
-        <td md-cell><div ng-if = "entry.planned"><md-icon>done</md-icon></div></td>
+        <td md-cell><div ng-if = "entry.estimate"><md-icon>check_circle</md-icon></div></td>
+        <td md-cell><div ng-if = "entry.planned"><md-icon>check_circle</md-icon></div></td>
         <td md-cell>{{ entry.notes }}</td>
+        <td md-cell>
+          <md-button aria-label="Delete" ng-click="deleteElement( entry )">
+            <md-icon>delete</md-icon>
+          </md-button>
+        </td>
       </tr>
     </tbody>
   </table>

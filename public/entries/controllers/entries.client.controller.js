@@ -1,6 +1,14 @@
 angular.module('entries').controller('EntriesController', ['$scope', '$routeParams', '$location', '$mdDialog', '$mdMedia', 'Entries',
   function($scope, $routeParams, $location, $mdDialog, $mdMedia, Entries) {
 
+    //TODO: Long Term I probably shouldn't have this in two places
+    var MONTH_NAMES = [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"
+    ];
+
     /**
     * CREATE
     **/
@@ -101,6 +109,37 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         $scope.customFullscreen = (wantsFullScreen === true);
       });
     }
+
+    /**
+    * Delete the selected element
+    **/
+    $scope.deleteElement = function(entryToDelete) {
+      console.log('User selected to delete: ' + JSON.stringify(entryToDelete));
+
+      //build the text content
+      var textToShow = 'Are you sure you want to delete ' + entryToDelete.name + ' from ';
+      var dateObj = new Date(entryToDelete.date);
+      textToShow += MONTH_NAMES[dateObj.getMonth()] + ' ' + dateObj.getDate() + '?';
+
+      var confirmDeleteDialog = $mdDialog.confirm()
+        .title('Confirm Deletion')
+        .textContent(textToShow)
+        .ariaLabel('Confirm Deletion')
+        .ok('Delete!')
+        .cancel('Please Don\'t Delete');
+
+      $mdDialog.show(confirmDeleteDialog).then(function() {
+        console.log('Selected To Delete')
+        entryToDelete.$delete(entryToDelete,function() {
+          console.log('Successfully Deleted!');
+          $location.path('entries/')
+        },function() {
+          console.log('Failed To Delete');
+        });
+      }, function() {
+        console.log('Selected To Keep It Around');
+      });
+    };
   }
 ]);
 function DialogController($scope, $mdDialog) {
