@@ -25,3 +25,7 @@
 #entryTableBody button {
   min-width : 0px;
 }
+
+#entryTableBody .entryTableButton {
+  padding-right : 0px;
+}
