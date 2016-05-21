@@ -24,7 +24,6 @@
         <th md-column><span>Est</span></th>
         <th md-column><span>Plan</span></th>
         <th md-column><span>Notes</span></th>
-        <th></th>
       </tr>
     </thead>
     <tbody md-body id = "entryTableBody">
@@ -73,28 +72,28 @@
             <td md-cell ng-if = "!entry.editable">{{ entry.notes }}</td>
 
             <!-- Edit Button -->
-            <td md-cell ng-if = "!entry.editable">
+            <td md-cell ng-if = "!entry.editable" class = "entryTableButton">
               <md-button aria-label="Edit" ng-click="editElement( entry )">
                 <md-icon>create</md-icon>
               </md-button>
             </td>
 
             <!-- Save Button -->
-            <td md-cell ng-if = "entry.editable">
+            <td md-cell ng-if = "entry.editable" class = "entryTableButton">
               <md-button aria-label="Save" ng-click="editElement( entry )">
                 <md-icon>save</md-icon>
               </md-button>
             </td>
 
             <!-- Delete Button -->
-            <td md-cell ng-if = "!entry.editable">
+            <td md-cell ng-if = "!entry.editable" class = "entryTableButton">
               <md-button aria-label="Delete" ng-click="deleteElement( entry )">
                 <md-icon>delete</md-icon>
               </md-button>
             </td>
 
             <!-- Revert Button -->
-            <td md-cell ng-if = "entry.editable">
+            <td md-cell ng-if = "entry.editable" class = "entryTableButton">
               <md-button aria-label="undo" ng-click="revertChange( entry )">
                 <md-icon>undo</md-icon>
               </md-button>
