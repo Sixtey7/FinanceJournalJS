@@ -54,6 +54,9 @@ exports.create = function (req, res, next) {
   });
 };
 
+/**
+* Method used to process entries from a CSV and import them
+**/
 exports.createFromCSV = function (req, res, next) {
   var csvDataObj = req.body;
   //console.log(JSON.stringify(csvDataObj));
@@ -134,7 +137,11 @@ exports.list = function(req, res, next) {
         console.log(('Created the balance ' + balance).debug);
         console.log(('Got the date: ' + entries[i].date));
         entries[i].balance = balance;
+        entries[i].date = new Date(entries[i].date);
       }
+
+      entries = flagPastElements(entries);
+
       res.json(entries);
     }
   });
@@ -148,12 +155,29 @@ exports.read = function(req, res) {
 * UPDATE
 **/
 exports.update = function (req, res, next) {
+  /*console.log((JSON.stringify(req.entry)).error);
+  delete req.entry._id;
+  console.log((JSON.stringify(req.entry)).error); */
   Entry.findByIdAndUpdate(req.entry.id, req.body, function(err, entry) {
     if (err) {
       return next(err);
     }
     else {
       res.json(entry);
+    }
+  });
+};
+
+exports.performElementMaintenance = function (req, res, next) {
+  //probably want to pair this done (ie just select not done, planned, estimate, anything in the past, etc)
+  Entry.find({}).sort({date : 1}).exec(function(err, entries) {
+    if (err) {
+      return next(err);
+    }
+    else {
+      entries = flagPastElements(entries);
+      //TODO: Need to figure out how to save this
+      res.json('Success');
     }
   });
 };
@@ -188,3 +212,26 @@ exports.entryById = function (req, res, next, id) {
     }
   });
 };
+
+var flagPastElements = function (entryList) {
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  for (var i = 0; i < entryList.length; i++) {
+    console.log((JSON.stringify(entryList[i])).debug);
+    //only want to flag an element as done if its not an estimate or not planned
+    //also, don't need to bother checking the date if its already done
+    if (!entryList[i].planned && !entryList[i].estimate && !entryList[i].done) {
+      if (entryList[i].date < today) {
+        console.log('Determined ' + entryList[i].date + ' to be before ' + today);
+        entryList[i].past = true;
+      }
+    }
+  }
+
+  return entryList;
+}
+
+var flagElementIfPast = function( element ) {
+
+}

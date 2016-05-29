@@ -11,6 +11,10 @@ var EntrySchema = new Schema({
   },
   estimate : Boolean,
   planned : Boolean,
+  past : {
+    type : Boolean,
+    default : false
+  },
   notes : String
 });
 

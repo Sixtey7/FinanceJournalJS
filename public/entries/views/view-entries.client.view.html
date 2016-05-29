@@ -36,7 +36,7 @@
                 <input type="text" ng-model = "entry.source" aria-label="Source"/>
               </md-input-container>
             </td>
-            <td md-cell ng-if = "!entry.editable">{{ entry.source }}</td>
+            <td md-cell ng-if = "!entry.editable" ng-class="{ completedRowCell: entry.past }">{{ entry.source }}</td>
 
             <!-- Amount -->
             <td md-cell ng-if = "entry.editable">
@@ -44,24 +44,24 @@
                 <input type="number" ng-model="entry.amount" aria-label="Amount"/>
               </md-input-container class="md-block">
             </td>
-            <td md-cell ng-if = "!entry.editable">{{ entry.amount | number : 2 }}</td>
+            <td md-cell ng-if = "!entry.editable" ng-class="{ completedRowCell: entry.past }">{{ entry.amount | number : 2 }}</td>
 
             <!-- balance should not be editable -->
-            <td md-cell>{{ entry.balance | number : 2 }}</td>
+            <td md-cell ng-class="{ completedRowCell: (entry.past && !entry.editable)}">{{ entry.balance | number : 2 }}</td>
 
             <!-- Date -->
             <td md-cell ng-if = "entry.editable">
               <md-datepicker type="date" ng-model="entry.date" required aria-label="Date"></md-datepicker>
             </td>
-            <td md-cell ng-if = "!entry.editable">{{ entry.date | formatDate }}</td>
+            <td md-cell ng-if = "!entry.editable" ng-class="{ completedRowCell: entry.past }">{{ entry.date | formatDate }}</td>
 
             <!-- Estimate -->
             <td md-cell ng-if = "entry.editable"><md-checkbox ng-model="entry.estimate" aria-label="Estimate"/></td>
-            <td md-cell ng-if = "!entry.editable"><div ng-if = "entry.estimate"><md-icon>check_circle</md-icon></div></td>
+            <td md-cell ng-if = "!entry.editable" ng-class="{ completedRowCell: entry.past }"><div ng-if = "entry.estimate"><md-icon>check_circle</md-icon></div></td>
 
             <!-- Planned -->
             <td md-cell ng-if = "entry.editable"><md-checkbox ng-model="entry.planned" aria-label="Planned"/></td>
-            <td md-cell ng-if = "!entry.editable"><div ng-if = "entry.planned"><md-icon>check_circle</md-icon></div></td>
+            <td md-cell ng-if = "!entry.editable" ng-class="{ completedRowCell: entry.past }"><div ng-if = "entry.planned"><md-icon>check_circle</md-icon></div></td>
 
             <!-- Notes -->
             <td md-cell ng-if = "entry.editable">
@@ -69,10 +69,10 @@
                 <input type="text" ng-model = "entry.notes" aria-label="Notes"/>
               </md-input-container class="md-block">
             </td>
-            <td md-cell ng-if = "!entry.editable">{{ entry.notes }}</td>
+            <td md-cell ng-if = "!entry.editable" ng-class="{ completedRowCell: entry.past }">{{ entry.notes }}</td>
 
             <!-- Edit Button -->
-            <td md-cell ng-if = "!entry.editable" class = "entryTableButton">
+            <td md-cell ng-if = "!entry.editable" class = "entryTableButton" ng-class="{ completedRowCell: entry.past }">
               <md-button aria-label="Edit" ng-click="editElement( entry )">
                 <md-icon>create</md-icon>
               </md-button>
@@ -86,7 +86,7 @@
             </td>
 
             <!-- Delete Button -->
-            <td md-cell ng-if = "!entry.editable" class = "entryTableButton">
+            <td md-cell ng-if = "!entry.editable" class = "entryTableButton" ng-class="{ completedRowCell: entry.past }">
               <md-button aria-label="Delete" ng-click="deleteElement( entry )">
                 <md-icon>delete</md-icon>
               </md-button>
