@@ -22,10 +22,22 @@
   width: 50px;
 }
 
+
+/**
+* Override some of the default styles on the md-table buttons
+* Otherwise they were taking up too much space and looked awful
+*/
 #entryTableBody button {
   min-width : 0px;
 }
 
 #entryTableBody .entryTableButton {
   padding-right : 0px;
+}
+
+/**
+* Fill completed cells green
+*/
+#entryTableBody .completedRowCell {
+  background-color : green;
 }
