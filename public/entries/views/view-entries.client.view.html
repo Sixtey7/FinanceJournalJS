@@ -4,12 +4,15 @@
   <md-icon>add</md-icon>
 </md-button>
 
-<md-toolbar class = "md-table-toolbar md-info">
+<md-toolbar class = "md-table-toolbar md-info" id = "headerToolbar">
   <div class = "md-toolbar-tools">
     <span>Entries</span>
     <div flex></div>
+    <md-button class = "md-icon-button" ng-click="showDateDialog()">
+      <md-icon class = "headerButton">event_node</md-icon>
+    </md-button>
     <md-button class = "md-icon-button" ng-click="find()">
-      <md-icon id = "refreshButton">refresh</md-icon>
+      <md-icon class = "headerButton">refresh</md-icon>
     </md-button>
   </div>
 </md-toolbar>
