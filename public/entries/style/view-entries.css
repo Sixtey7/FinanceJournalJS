@@ -28,6 +28,11 @@
   font-weight: bold;
   color : white;
 }
+
+#refreshButton {
+  color: white;
+}
+
 /**
 * Format the entry table
 */
