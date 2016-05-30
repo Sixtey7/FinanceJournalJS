@@ -12,6 +12,23 @@
 }
 
 /**
+* Format the Entry Table Header
+**/
+#entryTableHead {
+  background: rgb(63,81,181);
+  border-color: rgb(63,81,181);
+}
+
+#entryTableHead tr {
+  background-color: rgb(63,81,181);
+}
+
+#entryTableHead tr th span {
+  font-size: 14px;
+  font-weight: bold;
+  color : white;
+}
+/**
 * Format the entry table
 */
 #entryTableBody input[type="text"] {
