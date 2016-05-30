@@ -207,6 +207,11 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         entryId : entryToRevert.id
       });
     }
+
+    $scope.showDateDialog = function() {
+      //TODO : Need to write this method
+      console.log('about to show date dialog');
+    }
   }
 ]);
 
