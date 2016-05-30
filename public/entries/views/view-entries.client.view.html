@@ -15,7 +15,7 @@
 </md-toolbar>
 <md-table-container>
   <table md-table md-progress = "promise">
-    <thead md-head>
+    <thead md-head id = "entryTableHead">
       <tr>
         <th md-column><span>Source</span></th>
         <th md-column md-numeric><span>Amount</span></th>
@@ -24,6 +24,8 @@
         <th md-column><span>Est</span></th>
         <th md-column><span>Plan</span></th>
         <th md-column><span>Notes</span></th>
+        <th md-column></th>
+        <th md-column></th>
       </tr>
     </thead>
     <tbody md-body id = "entryTableBody">
