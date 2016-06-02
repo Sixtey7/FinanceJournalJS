@@ -1,4 +1,4 @@
-<section data-ng-controller="EntriesController" data-ng-init="find()" class="md-padding" ng-cloak>
+<section ng-controller="EntriesController as ec" ng-init="find()" class="md-padding" ng-cloak>
 
 <md-button class="md-fab md-primary md-fab-bottom-right" aria-label="Add New" ng-click="showNewEntryDialog($event)">
   <md-icon>add</md-icon>
@@ -8,14 +8,23 @@
   <div class = "md-toolbar-tools">
     <span>Entries</span>
     <div flex></div>
-    <md-button class = "md-icon-button" ng-click="showDateDialog()">
-      <md-icon class = "headerButton">event_node</md-icon>
+    <div ng-if="filterDate.startTime || filterDate.endTime">
+      ( {{ filterDate.startTime }} - {{ filterDate.endTime }} )
+    </div>
+    <div flex></div>
+
+    <md-button class = "md-icon-button" ng-if = " filterDate.startTime || filterDate.endTime" ng-click="removeFilter($event)">
+      <md-icon class = "headerButton">event_busy</md-icon>
+    </md-button>
+    <md-button class = "md-icon-button" ng-click="showDateDialog($event)">
+      <md-icon class = "headerButton">event</md-icon>
     </md-button>
     <md-button class = "md-icon-button" ng-click="find()">
       <md-icon class = "headerButton">refresh</md-icon>
     </md-button>
   </div>
 </md-toolbar>
+
 <md-table-container>
   <table md-table md-progress = "promise">
     <thead md-head id = "entryTableHead">
@@ -32,7 +41,7 @@
       </tr>
     </thead>
     <tbody md-body id = "entryTableBody">
-      <tr md-row ng-repeat = "entry in entries">
+      <tr md-row ng-repeat = "entry in entries track by $index">
             <!-- I'd really like to find a better way to do this, but apparently I'm an idiot -->
 
             <!-- Source -->
