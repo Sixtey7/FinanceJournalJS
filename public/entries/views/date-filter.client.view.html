@@ -1,10 +1,10 @@
 <md-dialog aria-label="Filter Display Dates" ng-cloak data-ng-controller="EntriesController">
   <form novalidate class="pws_popup">
     <div layout-gt-xs="row">
-      <md-datepicker type="date" ng-model="date" id="startDate" md-placeholder="startDate" required></md-datepicker>
-      <md-datepicker type="date" ng-model="date" id="endDate" md-placeholder="endDate" required></md-datepicker>
+      <md-datepicker type="date" ng-model="startDate" id="startDate" md-placeholder="startDate" required></md-datepicker>
+      <md-datepicker type="date" ng-model="endDate" id="endDate" md-placeholder="endDate" required></md-datepicker>
       <md-dialog-actions layout="row">
-        <md-button class="md-raised md-primary" ng-click="create()" type="submit">Submit</md-button>
+        <md-button class="md-raised md-primary" ng-click="findBetweenDates(ev)" type="submit">Submit</md-button>
       </md-dialog-actions>
       <div data-ng-show="error">
         <strong data-ng-bind="error"></strong>

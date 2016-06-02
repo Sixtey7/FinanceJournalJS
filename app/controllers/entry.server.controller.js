@@ -117,15 +117,6 @@ console.log(JSON.stringify(req.body));
 * READ
 **/
 exports.list = function(req, res, next) {
-  /*Entry.find({}, function(err, entries) {
-    if (err) {
-      return next(err);
-    }
-    else {
-      res.json(entries);
-    }
-  });*/
-
   Entry.find({}).sort({date : 1}).exec(function(err, entries) {
     if (err) {
       return next(err);
@@ -149,6 +140,43 @@ exports.list = function(req, res, next) {
 
 exports.read = function(req, res) {
   res.json(req.entry);
+};
+
+/**
+* Find entries in between dates
+**/
+exports.findBetweenDates = function(req, res, next) {
+  var startDate = req.body.startDate;
+  var endDate = req.body.endDate;
+
+  console.log((JSON.stringify(req.body)).debug);
+
+  console.log(('Finding between date range: ' + startDate + ' and ' + endDate).debug);
+
+  Entry.find({
+    date : {
+      $gte : startDate,
+      $lte : endDate
+    }
+  }).sort({date : 1}).exec(function(err, entries) {
+    if (err) {
+      return next(err);
+    }
+    else {
+      var balance = 10000;
+      for (var i = 0; i < entries.length; i++) {
+        balance = balance + entries[i].amount;
+        console.log(('Created the balance ' + balance).debug);
+        console.log(('Got the date: ' + entries[i].date));
+        entries[i].balance = balance;
+        entries[i].date = new Date(entries[i].date);
+      }
+
+      entries = flagPastElements(entries);
+
+      res.json(entries);
+    }
+  });
 };
 
 /**

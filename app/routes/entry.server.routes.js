@@ -4,6 +4,10 @@ var bodyParser = require('body-parser');
 require('../../config/colors');
 
 module.exports = function(app) {
+
+  app.route('/api/entries/dateRange')
+    .post(entry.findBetweenDates);
+
   app.route('/api/entries')
     .get(entry.list)
     .post(entry.create);
@@ -18,6 +22,7 @@ module.exports = function(app) {
 
   app.route('/api/entries/maint')
     .post(entry.performElementMaintenance);
-    
+
+
   app.param('entryId', entry.entryById);
 }

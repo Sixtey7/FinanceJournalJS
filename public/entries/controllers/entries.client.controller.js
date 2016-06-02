@@ -38,15 +38,40 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     /**
     * READ
     **/
-    function success(entries) {
+    function success(newEntries) {
+      console.log('Success Called!');
+
+      console.log('Got the entries: ' + JSON.stringify(newEntries));
       /** TODO: Super temp code **/
-      for (var i = 0; i < entries.length; i++) {
-        entries[i].date = new Date(entries[i].date);
+      for (var i = 0; i < newEntries.length; i++) {
+        newEntries[i].date = new Date(newEntries[i].date);
       }
       /** TODO: End Super temp code **/
 
       //Probably less temp code, but temp code nevertheless
-      $scope.entries = entries;
+      if ($scope.entries) {
+        console.log('clearing the existing array');
+
+        $scope.entries.splice(0, $scope.entries.length);
+
+        $scope.entries.push.apply($scope.entries, newEntries);
+
+      }
+      else {
+        console.log('creating the entries element');
+        $scope.filterDate = {};
+        $scope.entries = newEntries;
+      }
+
+      if ($scope.startDate) {
+        $scope.filterDate.startTime = $scope.startDate.toDateString();
+      }
+
+      if ($scope.endDate) {
+        $scope.filterDate.endTime = $scope.endDate.toDateString();
+      }
+
+      console.log('scope.entries: ' + JSON.stringify($scope.entries));
     };
 
     $scope.find = function() {
@@ -104,7 +129,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         controller : DialogController,
         templateUrl : '../entries/views/add-entry.client.view.html',
         parent : angular.element(document.body),
-        targentEvent : ev,
+        targetEvent : ev,
         clickOutsideToClose : true,
         fullscreen : useFullScreen
       })
@@ -208,9 +233,53 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
       });
     }
 
-    $scope.showDateDialog = function() {
-      //TODO : Need to write this method
+    $scope.showDateDialog = function(ev) {
       console.log('about to show date dialog');
+
+      var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+
+      $mdDialog.show({
+        controller : DialogController,
+        templateUrl : '../entries/views/date-filter.client.view.html',
+        parent : angular.element(document.body),
+        targetEvent : ev,
+        clickOutsideToClose : true,
+        fullscreen : useFullScreen,
+        scope : $scope,        // use parent scope in template
+        preserveScope: true  // do not forget this if use parent scope
+      })
+      .then(function(answer) {
+        $scope.status = 'Date Filter Applied!';
+      }, function() {
+        $scope.status = 'Date Filter Canceled';
+      });
+
+      $scope.$watch(function() {
+        return $mdMedia('xs') || $mdMedia('sm');
+      }, function(wantsFullScreen) {
+        $scope.customFullscreen = (wantsFullScreen === true);
+      });
+    }
+
+    $scope.findBetweenDates = function(event) {
+      $mdDialog.hide();
+
+      console.log('Start Date: ' + $scope.startDate +  ' End Date : ' + $scope.endDate);
+
+      $scope.startDateString = $scope.startDate.toDateString() + '';
+
+      console.log('Current entries' + JSON.stringify($scope.entries));
+      //$scope.entries.pop();
+
+      var dateObj = {};
+      dateObj.startDate = this.startDate;
+      dateObj.endDate = this.endDate;
+      $scope.promise = Entries.getBetweenDates(dateObj, success).$promise;
+    }
+
+    $scope.removeFilter = function(ev) {
+      $scope.filterDate = {};
+      $scope.promise = Entries.query($scope.query, success).$promise;
     }
   }
 ]);
