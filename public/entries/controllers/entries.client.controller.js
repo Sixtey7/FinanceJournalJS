@@ -1,5 +1,5 @@
-angular.module('entries').controller('EntriesController', ['$scope', '$routeParams', '$location', '$mdDialog', '$mdMedia', 'Entries',
-  function($scope, $routeParams, $location, $mdDialog, $mdMedia, Entries) {
+angular.module('entries').controller('EntriesController', ['$scope', '$routeParams', '$location', '$mdDialog', '$mdToast', '$mdMedia', 'Entries',
+  function($scope, $routeParams, $location, $mdDialog, $mdToast, $mdMedia, Entries) {
 
     //TODO: Long Term I probably shouldn't have this in two places
     var MONTH_NAMES = [
@@ -25,10 +25,15 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
       });
 
       entry.$save(function(response) {
-        /** TODO: There's probably a better way to do the refresh here, like tell angular
-        to requery its dataset, but fuck if I know how **/
         console.log('Successfully created!');
-        $location.path('entries/');
+        $scope.entries.push(response);
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Entry Successfully Created!')
+            .position('bottom middle')
+            .hideDelay(3000)
+        );
+
       }, function(errorResponse) {
         console.log('Failed on creation!');
         $scope.error = errorResponse.data.message;
@@ -131,7 +136,9 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         parent : angular.element(document.body),
         targetEvent : ev,
         clickOutsideToClose : true,
-        fullscreen : useFullScreen
+        fullscreen : useFullScreen,
+        scope : $scope,        // use parent scope in template
+        preserveScope: true  // do not forget this if use parent scope
       })
       .then(function(answer) {
         $scope.status = 'New Entry Added!';
@@ -170,7 +177,10 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         entryToDelete.$delete(entryToDelete.id,
           function() {
             console.log('Successfully Deleted!');
-            $location.path('entries/');
+
+            var index = $scope.entries.indexOf(entryToDelete);
+            console.log('Got the index: ' + index);
+            $scope.entries.splice(index, 1);
           },function() {
             console.log('Failed To Delete');
           });
@@ -189,7 +199,6 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         entryToEdit.$save(
           function() {
             console.log('Successfully Saved!');
-            $location.path('entries/');
           },
           function() {
             console.log('Failed To Save...');
@@ -206,7 +215,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     /**
     * Revert All Changes
     **/
-    $scope.revertAllChanges = function() {
+    /*$scope.revertAllChanges = function() {
       var confirmRevertDialog = $mdDialog.confirm()
         .title('Confirm Revert')
         .textContent('Are you sure you want to revert all changes?')
@@ -224,7 +233,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         }
       );
     };
-
+*/
     $scope.revertChange = function( entryToRevert ) {
       var index = $scope.entries.indexOf(entryToRevert);
       console.log('Got the index: ' + index);
