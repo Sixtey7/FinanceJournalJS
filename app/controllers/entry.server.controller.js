@@ -122,17 +122,19 @@ exports.list = function(req, res, next) {
       return next(err);
     }
     else {
-      var balance = 10000;
-      for (var i = 0; i < entries.length; i++) {
-        balance = balance + entries[i].amount;
-        console.log(('Created the balance ' + balance).debug);
-        console.log(('Got the date: ' + entries[i].date));
-        entries[i].balance = balance;
-        entries[i].date = new Date(entries[i].date);
+      /*if (entries.length > 0) {
+        var balance = entries[0].amount;
+        for (var i = 0; i < entries.length; i++) {
+          balance = balance + entries[i].amount;
+          console.log(('Created the balance ' + balance).debug);
+          console.log(('Got the date: ' + entries[i].date));
+          entries[i].balance = balance;
+          entries[i].date = new Date(entries[i].date);
+        }
       }
 
       entries = flagPastElements(entries);
-
+*/
       res.json(entries);
     }
   });
@@ -241,7 +243,7 @@ exports.entryById = function (req, res, next, id) {
   });
 };
 
-var flagPastElements = function (entryList) {
+/*var flagPastElements = function (entryList) {
   var today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -255,8 +257,11 @@ var flagPastElements = function (entryList) {
         entryList[i].past = true;
       }
     }
+    else {
+      entryList[i].past  = false;
+    }
   }
-
+*/
   return entryList;
 }
 

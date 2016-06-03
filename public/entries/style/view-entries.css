@@ -71,3 +71,10 @@
 #entryTableBody .completedRowCell {
   background-color : green;
 }
+
+/**
+* Center the text of toasts!
+**/
+.md-toast-text {
+  text-align: center;
+}
