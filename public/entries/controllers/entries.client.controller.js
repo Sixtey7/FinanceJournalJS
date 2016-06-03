@@ -27,12 +27,8 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
       entry.$save(function(response) {
         console.log('Successfully created!');
         $scope.entries.push(response);
-        $mdToast.show(
-          $mdToast.simple()
-            .textContent('Entry Successfully Created!')
-            .position('bottom middle')
-            .hideDelay(3000)
-        );
+
+        showToast('Entry Successfully Created!');
 
       }, function(errorResponse) {
         console.log('Failed on creation!');
@@ -181,11 +177,16 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
             var index = $scope.entries.indexOf(entryToDelete);
             console.log('Got the index: ' + index);
             $scope.entries.splice(index, 1);
+
+            showToast('Entry Successfully Deleted!');
           },function() {
             console.log('Failed To Delete');
+
+            showToast('Error Deleting Entry!');
           });
       }, function() {
         console.log('Selected To Keep It Around');
+        showToast('No Action Taken');
       });
     };
 
@@ -199,9 +200,11 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         entryToEdit.$save(
           function() {
             console.log('Successfully Saved!');
+            showToast('Update Saved!');
           },
           function() {
             console.log('Failed To Save...');
+            showToast('Error Saving Update!');
           }
         )
         entryToEdit.editable = false;
@@ -289,6 +292,16 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     $scope.removeFilter = function(ev) {
       $scope.filterDate = {};
       $scope.promise = Entries.query($scope.query, success).$promise;
+    }
+
+    function showToast (messageToShow) {
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent(messageToShow)
+          .position('bottom left right')
+          .hideDelay(3000)
+      );
+
     }
   }
 ]);
