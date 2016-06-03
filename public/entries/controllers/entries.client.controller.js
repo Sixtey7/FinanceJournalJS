@@ -26,7 +26,24 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
 
       entry.$save(function(response) {
         console.log('Successfully created!');
-        $scope.entries.push(response);
+
+        //change the date to a date object
+        response.date = new Date(response.date);
+
+        if ($scope.entries.length > 0) {
+          var insertLoc = 0;
+          while (response.date.getTime() >= $scope.entries[insertLoc].date.getTime()) {
+            insertLoc++;
+            if (insertLoc == $scope.entries.length) {
+              console.log('Breaking at: ' + insertLoc);
+              break;
+            }
+          }
+          $scope.entries.splice(insertLoc, 0, response);
+
+          massageEntries();
+
+        }
 
         showToast('Entry Successfully Created!');
 
@@ -72,6 +89,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         $scope.filterDate.endTime = $scope.endDate.toDateString();
       }
 
+      massageEntries();
       console.log('scope.entries: ' + JSON.stringify($scope.entries));
     };
 
@@ -177,7 +195,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
             var index = $scope.entries.indexOf(entryToDelete);
             console.log('Got the index: ' + index);
             $scope.entries.splice(index, 1);
-
+            massageEntries();
             showToast('Entry Successfully Deleted!');
           },function() {
             console.log('Failed To Delete');
@@ -200,6 +218,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         entryToEdit.$save(
           function() {
             console.log('Successfully Saved!');
+            massageEntries();
             showToast('Update Saved!');
           },
           function() {
@@ -215,28 +234,6 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
       }
     };
 
-    /**
-    * Revert All Changes
-    **/
-    /*$scope.revertAllChanges = function() {
-      var confirmRevertDialog = $mdDialog.confirm()
-        .title('Confirm Revert')
-        .textContent('Are you sure you want to revert all changes?')
-        .ariaLabel('Confirm Revert')
-        .ok('Revert All!')
-        .cancel('Please Don\'t Revert');
-
-      $mdDialog.show(confirmRevertDialog).then(
-        function() {
-          console.log('Selected To Revert')
-          $location.path('entries/');
-
-        }, function() {
-          console.log('Selected To Not Revert');
-        }
-      );
-    };
-*/
     $scope.revertChange = function( entryToRevert ) {
       var index = $scope.entries.indexOf(entryToRevert);
       console.log('Got the index: ' + index);
@@ -298,10 +295,44 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
       $mdToast.show(
         $mdToast.simple()
           .textContent(messageToShow)
-          .position('bottom left right')
-          .hideDelay(3000)
+          .position('bottom left')
+          .hideDelay(1500)
       );
+    }
 
+    /**
+    * Loop through all of the entries and calculate the balance, flag done items as done, etc
+    **/
+    //TODO: This should probably take a start index, since if thing in position 500 changes, we don't need to touch 0-499
+    function massageEntries () {
+      var today = new Date();
+      today.setHours(0, 0, 0, 0);
+      var pastToday = false;
+      if ($scope.entries.length > 0) {
+        var balance = $scope.entries[0].amount;
+        for (var i = 0; i < $scope.entries.length; i++) {
+          balance = balance + $scope.entries[i].amount;
+          console.log(('Created the balance ' + balance).debug);
+          console.log(('Got the date: ' + $scope.entries[i].date));
+          $scope.entries[i].balance = balance;
+          $scope.entries[i].date = new Date($scope.entries[i].date);
+
+          //check if the element should be flagged as done
+          if (!pastToday) {
+            if (!$scope.entries[i].planned && !$scope.entries[i].estimate && !$scope.entries[i].done) {
+              if ($scope.entries[i].date < today) {
+                $scope.entries[i].past = true;
+              }
+              else {
+                pastToday = true;
+              }
+            }
+            else {
+              $scope.entries[i].past = false;
+            }
+          }
+        }
+      }
     }
   }
 ]);
