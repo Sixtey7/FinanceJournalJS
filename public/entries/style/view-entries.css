@@ -23,11 +23,19 @@
   background-color: rgb(63,81,181);
 }
 
+/*#entryTableHead tr th {
+  text-align: center;
+}*/
+
 #entryTableHead tr th span {
   font-size: 14px;
   font-weight: bold;
   color : white;
 }
+
+/*#entryTableHead tr td {
+  text-align: center;
+}*/
 
 #headerToolbar .headerButton {
   color: white;
