@@ -261,10 +261,11 @@ exports.entryById = function (req, res, next, id) {
       entryList[i].past  = false;
     }
   }
-*/
+
   return entryList;
 }
 
 var flagElementIfPast = function( element ) {
 
 }
+*/
