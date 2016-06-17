@@ -1,5 +1,5 @@
-angular.module('entries').controller('EntriesController', ['$scope', '$routeParams', '$location', '$mdDialog', '$mdToast', '$mdMedia', 'Entries', 'EntriesFactory',
-  function($scope, $routeParams, $location, $mdDialog, $mdToast, $mdMedia, Entries, EntriesFactory) {
+angular.module('entries').controller('EntriesController', ['$scope', '$routeParams', '$location', '$mdDialog', '$mdToast', '$mdMedia', 'Entries',
+  function($scope, $routeParams, $location, $mdDialog, $mdToast, $mdMedia, Entries) {
 
     //TODO: Long Term I probably shouldn't have this in two places
     var MONTH_NAMES = [
