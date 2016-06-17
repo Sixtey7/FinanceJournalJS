@@ -95,8 +95,9 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
 
     $scope.find = function() {
       //$scope.entries = Entries.query();
-      EntriesFactory.retrieveAll();
-      $scope.promise = Entries.query($scope.query, success).$promise;
+      //EntriesFactory.retrieveAll();
+      //$scope.promise = Entries.query($scope.query, success).$promise;
+      $scope.promise = EntriesFactory.retrieveAll($scope.query).$promise;
     };
 
     $scope.findOne = function() {
