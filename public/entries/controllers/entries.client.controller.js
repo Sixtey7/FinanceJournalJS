@@ -56,21 +56,11 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     /**
     * READ
     **/
+    /** TODO - Eventually, we should remove this and move to events **/
     function success(newEntries) {
       console.log('Success Called!');
-
-      console.log('Got the entries: ' + JSON.stringify(newEntries));
-      /** TODO: Super temp code **/
-      for (var i = 0; i < newEntries.length; i++) {
-        newEntries[i].date = new Date(newEntries[i].date);
-      }
-      /** TODO: End Super temp code **/
-
-      //Probably less temp code, but temp code nevertheless
       if ($scope.entries) {
-        console.log('clearing the existing array');
-
-        $scope.entries.splice(0, $scope.entries.length);
+        scope.entries.splice(0, $scope.entries.length);
 
         $scope.entries.push.apply($scope.entries, newEntries);
 
@@ -80,24 +70,12 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         $scope.filterDate = {};
         $scope.entries = newEntries;
       }
-
-      if ($scope.startDate) {
-        $scope.filterDate.startTime = $scope.startDate.toDateString();
-      }
-
-      if ($scope.endDate) {
-        $scope.filterDate.endTime = $scope.endDate.toDateString();
-      }
-
-      massageEntries();
-      console.log('scope.entries: ' + JSON.stringify($scope.entries));
     };
 
     $scope.find = function() {
-      //$scope.entries = Entries.query();
-      //EntriesFactory.retrieveAll();
-      //$scope.promise = Entries.query($scope.query, success).$promise;
-      $scope.promise = EntriesFactory.retrieveAll($scope.query).$promise;
+      $scope.promise = Entries.query($scope.query, success).$promise;
+
+      //EntriesFactory.retrieveAll($scope, success);
     };
 
     $scope.findOne = function() {
@@ -300,41 +278,6 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
           .position('bottom left')
           .hideDelay(1500)
       );
-    }
-
-    /**
-    * Loop through all of the entries and calculate the balance, flag done items as done, etc
-    **/
-    //TODO: This should probably take a start index, since if thing in position 500 changes, we don't need to touch 0-499
-    function massageEntries () {
-      var today = new Date();
-      today.setHours(0, 0, 0, 0);
-      var pastToday = false;
-      if ($scope.entries.length > 0) {
-        var balance = $scope.entries[0].amount;
-        for (var i = 0; i < $scope.entries.length; i++) {
-          balance = balance + $scope.entries[i].amount;
-          console.log(('Created the balance ' + balance).debug);
-          console.log(('Got the date: ' + $scope.entries[i].date));
-          $scope.entries[i].balance = balance;
-          $scope.entries[i].date = new Date($scope.entries[i].date);
-
-          //check if the element should be flagged as done
-          if (!pastToday) {
-            if (!$scope.entries[i].planned && !$scope.entries[i].estimate && !$scope.entries[i].done) {
-              if ($scope.entries[i].date < today) {
-                $scope.entries[i].past = true;
-              }
-              else {
-                pastToday = true;
-              }
-            }
-            else {
-              $scope.entries[i].past = false;
-            }
-          }
-        }
-      }
     }
   }
 ]);
