@@ -173,9 +173,7 @@ exports.findBetweenDates = function(req, res, next) {
         entries[i].balance = balance;
         entries[i].date = new Date(entries[i].date);
       }
-
-      entries = flagPastElements(entries);
-
+      
       res.json(entries);
     }
   });
