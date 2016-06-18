@@ -22,7 +22,7 @@ angular.module('entries').factory('Entries', ['$http', '$resource', '$log', 'Mas
     myFactory.getBetweenDates = function(dateObj, callback) {
       return $http.post(urlBase + 'dateRange', dateObj).success(
         function(data, status) {
-          callback(data);
+          callback(MassageService.massageEntryArray(data));
         }
       );
     }

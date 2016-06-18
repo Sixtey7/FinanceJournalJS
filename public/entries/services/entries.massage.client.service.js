@@ -34,5 +34,36 @@ angular.module('entries').service('MassageService', ['$log',
 
       return entryArrayToMassage;
     }
+
+    this.placeElementIntoPosition = function(entryArray, entryToPlace, oldLoc) {
+      //TODO: oldLoc is always -1
+      if (entryArray.length > 0) {
+        var insertLoc = 0;
+        entryToPlace.date = new Date(entryToPlace.date);
+        while (entryToPlace.date.getTime() >= entryArray[insertLoc].date.getTime()) {
+          insertLoc++;
+          if (insertLoc == entryArray.length) {
+            $log.debug('Breaking at: ' + insertLoc);
+            break;
+          }
+        }
+
+        if (insertLoc === oldLoc) {
+          $log.debug('Old location matched the new one -- nothing to do!');
+        }
+        else {
+          //first, we need to remove it from it's old location
+          if (oldLoc < insertLoc) {
+            //add the new one in, then remove the old one
+            entryArray.splice(insertLoc, 0, entryToPlace);
+            entryArray.splice(oldLoc, 1);
+          }
+          else {
+            entryArray.splice(oldLoc, 1);
+            entryArray.splice(insertLoc, 0, entryToPlace);
+          }
+        }
+      }
+    }
   }
 ]);

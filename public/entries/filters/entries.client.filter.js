@@ -33,9 +33,9 @@ module.filter('currency', function() {
 /**
 * Filter used to make the date prettier on the ui
 **/
-module.filter('formatDate', function() {
+module.filter('formatDate', ['$log', function($log) {
   return function(date) {
-    console.log('Formatting Date...');
+    $log.debug('Formatting Date...');
     if (date) {
       //TODO: May want to clean this up a bit to make the date even prettier
       var dateObj = new Date(date);
@@ -47,4 +47,4 @@ module.filter('formatDate', function() {
       return date;
     }
   }
-})
+}])
