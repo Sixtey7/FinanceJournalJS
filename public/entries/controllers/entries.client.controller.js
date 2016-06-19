@@ -31,18 +31,8 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         response.date = new Date(response.date);
 
         if ($scope.entries.length > 0) {
-          var insertLoc = 0;
-          while (response.date.getTime() >= $scope.entries[insertLoc].date.getTime()) {
-            insertLoc++;
-            if (insertLoc == $scope.entries.length) {
-              $log.debug('Breaking at: ' + insertLoc);
-              break;
-            }
-          }
-          $scope.entries.splice(insertLoc, 0, response);
-
-          massageEntries();
-
+          MassageService.placeElementIntoPosition($scope.entries, entry, false);
+          MassageService.massageEntryArray($scope.entries);
         }
 
         showToast('Entry Successfully Created!');
@@ -61,9 +51,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
       $log.debug('Success Called!');
       if ($scope.entries) {
         $scope.entries.splice(0, $scope.entries.length);
-
         $scope.entries.push.apply($scope.entries, newEntries);
-
       }
       else {
         $log.debug('creating the entries element');
@@ -175,7 +163,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
             var index = $scope.entries.indexOf(entryToDelete);
             $log.debug('Got the index: ' + index);
             $scope.entries.splice(index, 1);
-            massageEntries();
+            MassageService.massageEntryArray($scope.entries);
             showToast('Entry Successfully Deleted!');
           },function() {
             $log.error('Failed To Delete');
@@ -200,7 +188,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
         //entryToEdit.$save(
           function(entryToEdit) {
             $log.debug('Successfully Saved!');
-            MassageService.placeElementIntoPosition($scope.entries, entryToEdit, $scope.entries.indexOf(entryToEdit));
+            MassageService.placeElementIntoPosition($scope.entries, entryToEdit, true);
             MassageService.massageEntryArray($scope.entries);
             showToast('Update Saved!');
           },
