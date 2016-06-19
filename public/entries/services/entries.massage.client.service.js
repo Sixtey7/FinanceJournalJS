@@ -35,9 +35,21 @@ angular.module('entries').service('MassageService', ['$log',
       return entryArrayToMassage;
     }
 
-    this.placeElementIntoPosition = function(entryArray, entryToPlace, oldLoc) {
-      //TODO: oldLoc is always -1
+    this.placeElementIntoPosition = function(entryArray, entryToPlace, needToRemove) {
       if (entryArray.length > 0) {
+        //TODO: We could probably try to combine these two for loops
+        var oldLoc = -1;
+        if (needToRemove) {
+          //try to find the original position
+          for (var index = 0; index < entryArray.length; index++) {
+            if (entryArray[index].id === entryToPlace.id) {
+              oldLoc = index;
+              break;
+            }
+          }
+        }
+
+        //find the location to insert the entry
         var insertLoc = 0;
         entryToPlace.date = new Date(entryToPlace.date);
         while (entryToPlace.date.getTime() >= entryArray[insertLoc].date.getTime()) {
@@ -48,22 +60,30 @@ angular.module('entries').service('MassageService', ['$log',
           }
         }
 
-        if (insertLoc === oldLoc) {
-          $log.debug('Old location matched the new one -- nothing to do!');
-        }
-        else {
-          //first, we need to remove it from it's old location
-          if (oldLoc < insertLoc) {
-            //add the new one in, then remove the old one
-            entryArray.splice(insertLoc, 0, entryToPlace);
-            entryArray.splice(oldLoc, 1);
+        $log.debug('Old Loc: ' + oldLoc);
+        $log.debug('Insert Loc: ' + insertLoc);
+        if (oldLoc >= 0) {
+          if (insertLoc === oldLoc) {
+            $log.debug('Old location matched the new one -- nothing to do!');
           }
           else {
-            entryArray.splice(oldLoc, 1);
-            entryArray.splice(insertLoc, 0, entryToPlace);
+            //first, we need to remove it from it's old location
+            if (oldLoc < insertLoc) {
+              //add the new one in, then remove the old one
+              entryArray.splice(insertLoc, 0, entryToPlace);
+              entryArray.splice(oldLoc, 1);
+            }
+            else {
+              entryArray.splice(oldLoc, 1);
+              entryArray.splice(insertLoc, 0, entryToPlace);
+            }
           }
         }
-      }
+        else {
+          //don't need to worry about removing anything
+          entryArray.splice(insertLoc, 0, entryToPlace);
+        }
+    }
     }
   }
 ]);
