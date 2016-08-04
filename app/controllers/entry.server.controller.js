@@ -49,7 +49,8 @@ exports.create = function (req, res, next) {
       return next(err);
     }
     else {
-      res.json(entry);
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.json(entry);
     }
   });
 };
@@ -122,25 +123,14 @@ exports.list = function(req, res, next) {
       return next(err);
     }
     else {
-      /*if (entries.length > 0) {
-        var balance = entries[0].amount;
-        for (var i = 0; i < entries.length; i++) {
-          balance = balance + entries[i].amount;
-          console.log(('Created the balance ' + balance).debug);
-          console.log(('Got the date: ' + entries[i].date));
-          entries[i].balance = balance;
-          entries[i].date = new Date(entries[i].date);
-        }
-      }
-
-      entries = flagPastElements(entries);
-*/
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.json(entries);
     }
   });
 };
 
 exports.read = function(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.json(req.entry);
 };
 
@@ -173,7 +163,8 @@ exports.findBetweenDates = function(req, res, next) {
         entries[i].balance = balance;
         entries[i].date = new Date(entries[i].date);
       }
-      
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.json(entries);
     }
   });
@@ -191,7 +182,8 @@ exports.update = function (req, res, next) {
       return next(err);
     }
     else {
-      res.json(entry);
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.json(entry);
     }
   });
 };
@@ -219,7 +211,8 @@ exports.delete = function (req, res, next) {
       return next(err);
     }
     else {
-      res.json(req.entry);
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.json(req.entry);
     }
   });
 };
@@ -240,30 +233,3 @@ exports.entryById = function (req, res, next, id) {
     }
   });
 };
-
-/*var flagPastElements = function (entryList) {
-  var today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  for (var i = 0; i < entryList.length; i++) {
-    console.log((JSON.stringify(entryList[i])).debug);
-    //only want to flag an element as done if its not an estimate or not planned
-    //also, don't need to bother checking the date if its already done
-    if (!entryList[i].planned && !entryList[i].estimate && !entryList[i].done) {
-      if (entryList[i].date < today) {
-        console.log('Determined ' + entryList[i].date + ' to be before ' + today);
-        entryList[i].past = true;
-      }
-    }
-    else {
-      entryList[i].past  = false;
-    }
-  }
-
-  return entryList;
-}
-
-var flagElementIfPast = function( element ) {
-
-}
-*/
