@@ -106,7 +106,7 @@ angular.module('entries').controller('EntriesController', ['$scope', '$routePara
     };
 
     /**
-    * Show the filter html
+    * Show the new entry html
     **/
     $scope.showNewEntryDialog = function(ev) {
       $log.debug('Show new entry dialog');

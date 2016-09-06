@@ -11,7 +11,7 @@ console.log(('About to set up the server...').debug);
 var app = express(db);
 
 console.log(('About to listen on port 3000...').debug);
-app.listen(3000);
+app.listen(3000, "0.0.0.0");
 
 module.exports = app;
 
