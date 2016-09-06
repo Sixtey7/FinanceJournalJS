@@ -7,7 +7,7 @@ angular.module('entries').factory('Entries', ['$http', '$resource', '$log', 'Mas
 
     var parseDataForMassage = function(jsonData) {
       var entryArrayToMassage = angular.fromJson(jsonData);
-      return MassageService.massageEntryArray(entryArrayToMassage);
+      return MassageService.massageEntryArray(entryArrayToMassage, 0);
     }
 
     myFactory  =  $resource(urlBase + ':entryId', {
@@ -22,7 +22,7 @@ angular.module('entries').factory('Entries', ['$http', '$resource', '$log', 'Mas
     myFactory.getBetweenDates = function(dateObj, callback) {
       return $http.post(urlBase + 'dateRange', dateObj).success(
         function(data, status) {
-          callback(MassageService.massageEntryArray(data));
+          callback(MassageService.massageEntryArray(data.entryArray, data.startingBalance));
         }
       );
     }

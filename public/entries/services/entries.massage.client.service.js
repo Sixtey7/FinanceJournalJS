@@ -1,13 +1,23 @@
 angular.module('entries').service('MassageService', ['$log',
   function($log) {
-    this.massageEntryArray = function(entryArrayToMassage) {
+    this.massageEntryArray = function(entryArrayToMassage, startingBalance) {
       //var entryArrayToMassage = angular.fromJson(jsonData);
       $log.debug('Got the elements: ' + JSON.stringify(entryArrayToMassage));
       var today = new Date();
       today.setHours(0, 0, 0, 0);
       var pastToday = false;
       if (entryArrayToMassage.length > 0) {
-        var balance = entryArrayToMassage[0].amount;
+        
+        //check if a starting balance was provided
+        var balance = 0;
+        if (startingBalance) {
+          balance = startingBalance;
+        }
+        else if (entryArrayToMassage.length > 0 && entryArrayToMassage[0].balance) {
+          //TODO: subtracting the amount is a stupid hack - but it'll work for now!
+          balance = entryArrayToMassage[0].balance - entryArrayToMassage[0].amount;
+        }
+
         for (var i = 0; i < entryArrayToMassage.length; i++) {
           balance = balance + entryArrayToMassage[i].amount;
           $log.debug('Created the balance ' + balance);
@@ -33,9 +43,18 @@ angular.module('entries').service('MassageService', ['$log',
       }
 
       return entryArrayToMassage;
-    }
+    };
 
     this.placeElementIntoPosition = function(entryArray, entryToPlace, needToRemove) {
+      //check if this entry should be marked as past
+      var today = new Date();
+      if (!entryToPlace[i].planned && !entryToPlace[i].estimate && !entryToPlace[i].done && entryToPlace.date < today) {
+        entryToPlace.past = true;
+      }
+      else {
+        entryToPlace.past = false;
+      }
+
       if (entryArray.length > 0) {
         //TODO: We could probably try to combine these two for loops
         var oldLoc = -1;

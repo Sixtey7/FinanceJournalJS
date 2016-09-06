@@ -18,7 +18,7 @@ module.exports = function(app) {
     .delete(entry.delete);
 
   app.route('/api/entries/load')
-    .post(bodyParser.text(), entry.createFromCSV);
+    .put(bodyParser.text(), entry.createFromCSV);
 
   app.param('entryId', entry.entryById);
 }

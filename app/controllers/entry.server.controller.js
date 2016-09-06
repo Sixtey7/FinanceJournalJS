@@ -60,13 +60,13 @@ exports.create = function (req, res, next) {
 **/
 exports.createFromCSV = function (req, res, next) {
   var csvDataObj = req.body;
-  //console.log(JSON.stringify(csvDataObj));
-console.log(JSON.stringify(req.body));
-  var csvData = req.body;
+
+  var csvData = JSON.stringify(csvDataObj);
+  //return false;
 
   console.log(csvData);
 
-  var rows = csvData.split('\n');
+  var rows = csvData.split('\\r\\n');
 
   console.log(('Got: ' + rows.length + ' number of rows').debug);
 
@@ -78,28 +78,64 @@ console.log(JSON.stringify(req.body));
       /**
       * Assumed CSV layout:
       ** 0 - Source
-      ** 1 - Amount
-      ** 2 - Date
-      ** 3 - Estimate
-      ** 4 - Planned
+      ** 1 - Debit
+      ** 2 - Credit
+      ** 3 - Total
+      ** 4 - Date
       ** 5 - Notes
       **/
 
       //determine the date
       var date;
-      if (values[2]) {
+      if (values[4]) {
         console.log(('A date was provided, attempting to create an object').debug);
-        date = new Date(values[3]);
+        date = new Date(values[4]);
+
+        if (date === undefined) {
+          console.log(('Failed to create the date object out of the value: ' + values[4] + ' using today').warn);
+          date = Date.now();
+        }
       }
       else {
+        console.log(('No date detected').warn);
         date = Date.now();
       }
+      
+      var amount = values[2];
+      //determine the amount
+      if (values[1]) {
+        console.log(('Determine the amount to be negative: ' + values[1]).warn);
+        amount = -1 * values[1];
+      }
+
+      //shitty attempt to determine if the entry is an estimate
+      var estimate = false;
+      if (values[5]) {
+        console.log(('Looking for an estimate in the notes string: ' + values[5]).debug);
+        if (values[5].indexOf('est') !== -1) {
+          console.log(('Determine that this is an estimate').debug);
+          estimate = true;
+
+          //TODO: should probably parse out the est at this point, but, meh
+        }
+      }
+
+      //equally shitty attempt to determine if the entry is planned
+      var planned = false;
+      if (values[5]) {
+        console.log(('Looking for an planned in the notes string: ' + values[5]).debug);
+        if (values[5].indexOf('planned') !== -1) {
+          planned = true;
+          //TODO: should probably parse out the planned at this point, but, meh
+        }
+      }
+
       var entry = new Entry({
         source : values[0],
-        amount : avalues[1],
+        amount : amount,
         date : date,
-        estimate : values[3],
-        planned : values[4],
+        estimate : estimate,
+        planned : planned,
         notes : values[5]
       });
 
@@ -147,7 +183,7 @@ exports.findBetweenDates = function(req, res, next) {
 
   Entry.find({
     date : {
-      $gte : startDate,
+      //$gte : startDate,
       $lte : endDate
     }
   }).sort({date : 1}).exec(function(err, entries) {
@@ -155,17 +191,47 @@ exports.findBetweenDates = function(req, res, next) {
       return next(err);
     }
     else {
-      var balance = 10000;
+      //array to hold the entries we want to send to the client
+      var entriesToSend = new Array();
+
+      //starting balance to calculate;
+      var startingBalance = 0;
+
+      var startDateObject = new Date(startDate);
+
+      //boolean to hold whether or not we have passed the start sdate
+      var passedDate = false;
       for (var i = 0; i < entries.length; i++) {
-        balance = balance + entries[i].amount;
-        console.log(('Created the balance ' + balance).debug);
         console.log(('Got the date: ' + entries[i].date));
-        entries[i].balance = balance;
         entries[i].date = new Date(entries[i].date);
+
+        if (passedDate) {
+          //we're past the date, so we can safely just add to the array
+          entriesToSend.push(entries[i])
+        }
+        else {
+          if (entries[i].date.getTime() >= startDateObject.getTime()) {
+            //we are within the elements that the user cares about
+            passedDate = true;
+
+            //since this is in the set - Add it!
+            entriesToSend.push(entries[i]);
+          }
+          else {
+            startingBalance += entries[i].amount;
+          }
+        }
+        
       }
 
       res.setHeader('Access-Control-Allow-Origin', '*');
-      res.json(entries);
+
+      //build the object to send
+      //TODO: There's probably a better way to do this than just creating a random object
+      var objectToSend = {};
+      objectToSend.entryArray = entriesToSend;
+      objectToSend.startingBalance = startingBalance;
+      res.json(objectToSend);
     }
   });
 };
