@@ -170,6 +170,68 @@ exports.read = function(req, res) {
   res.json(req.entry);
 };
 
+//returns all of the entries in csv form, for later possible import
+exports.getAsCSV = function(req, res, next) {
+  //first, get all the entries
+  Entry.find({}).sort({date : 1}).exec(function(err, entries) {
+    if (err) {
+      return next(err);
+    }
+    else {
+      var csvResponse = '';
+
+      /**
+      * Assumed CSV layout:
+      ** 0 - Source
+      ** 1 - Debit
+      ** 2 - Credit
+      ** 3 - Total
+      ** 4 - Date
+      ** 5 - Notes
+      **/
+      for (var i = 0; i < entries.length; i++) {
+        var csvLine = '';
+        csvLine += entries[i].source + ',';
+        if (entries[i].amount < 0) {
+          //this is a Debit
+          var debitAmount = -1 * entries[i].amount;
+          csvLine += debitAmount + ',,';
+        }
+        else {
+          //this is a Credit
+          csvLine += ',' + entries[i].amount + ',';
+        }
+
+        //we're not going to care about totals here - only in the planned csv layout due to excel
+        csvLine += ',';
+
+        //date
+        csvLine += entries[i].date.toISOString() + ',';
+
+        //build the notes line following my shitty convention
+        var notes = entries[i].notes;
+
+        if (entries[i].estimate && entries[i].planned) {
+          notes = '(est planned) ' + notes;
+        }
+        else if (entries[i].estimate) {
+          notes = '(est) ' + notes;
+        }
+        else if (entries[i].planned) {
+          notes = '(planned) ' + notes;
+        }
+
+        csvLine += notes + '\r\n';
+
+        csvResponse += csvLine;
+      }
+
+      res.setHeader('Acess-Control-Allow-Origin', '*');
+      res.send(csvResponse);
+    }
+  })
+}
+
 /**
 * Find entries in between dates
 **/

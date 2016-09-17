@@ -12,6 +12,9 @@ module.exports = function(app) {
     .get(entry.list)
     .post(entry.create);
 
+  app.route('/api/entries/csv')
+    .get(entry.getAsCSV);
+
   app.route('/api/entries/:entryId')
     .get(entry.read)
     .post(entry.update)
