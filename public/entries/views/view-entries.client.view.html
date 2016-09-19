@@ -6,7 +6,7 @@
 
 <md-toolbar class = "md-table-toolbar md-info" id = "headerToolbar">
   <div class = "md-toolbar-tools">
-    <span>Entries</span>
+    <div id = "entriesTitleDiv">Entries</div>
     <div flex></div>
     <div ng-if="filterDate.startTime || filterDate.endTime">
       ( {{ filterDate.startTime }} - {{ filterDate.endTime }} )
