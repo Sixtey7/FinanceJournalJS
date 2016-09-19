@@ -48,7 +48,7 @@ angular.module('entries').service('MassageService', ['$log',
     this.placeElementIntoPosition = function(entryArray, entryToPlace, needToRemove) {
       //check if this entry should be marked as past
       var today = new Date();
-      if (!entryToPlace[i].planned && !entryToPlace[i].estimate && !entryToPlace[i].done && entryToPlace.date < today) {
+      if (!entryToPlace.planned && !entryToPlace.estimate && !entryToPlace.done && entryToPlace.date < today) {
         entryToPlace.past = true;
       }
       else {

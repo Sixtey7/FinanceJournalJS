@@ -66,7 +66,7 @@ exports.createFromCSV = function (req, res, next) {
 
   console.log(csvData);
 
-  var rows = csvData.split('\\r\\n');
+  var rows = csvData.split('\\n');
 
   console.log(('Got: ' + rows.length + ' number of rows').debug);
 
