@@ -4,7 +4,6 @@
     <title><%= title %></title>
   </head>
   <body>
-    <section ng-view></section>
     <!-- Add in the dependencies -->
     <script type = "text/javascript"
       src = "lib/angular/angular.js"></script>
@@ -34,6 +33,11 @@
 
     <script type="text/javascript" src="lib/angular-material-data-table/dist/md-data-table.min.js"></script>
 
+    <!-- Add in the gereral resources -->
+    <script type = "text/javascript"
+      src = "/common/general.client.module.js"></script>
+
+    <script type = "text/javascript" src = "/common/controllers/navigation.client.controller.js"></script>
     <!-- Add in the resources for entries -->
     <script type = "text/javascript"
       src = "/entries/entries.client.module.js"></script>
@@ -59,7 +63,39 @@
 
 
     <!-- add in my styles last (since they contain overrides -->
+    <link href="common/style/general.css" rel="stylesheet" type="text/css"/>
     <link href="entries/style/view-entries.css" rel="stylesheet" type="text/css"/>
+
+    <!-- create a side nav -->
+    <md-sidenav
+        class="md-sidenav-left"
+        md-component-id="left"
+        md-whiteframe="4">
+
+      <md-toolbar class="md-theme-indigo">
+        <h1 class="md-toolbar-tools">Sidenav Left</h1>
+      </md-toolbar>
+      <md-content layout-padding ng-controller="LeftCtrl">
+      <md-content layout-padding>
+        <md-button ng-click="close()" class="md-primary">
+          Close Sidenav Left
+        </md-button>
+      </md-content>
+    </md-sidenav>
+
+    <!-- Create the general Content Area That Will Be Displayed On All Pages -->
+    <!--div ng-controller="NavController">
+      <md-content flex layout-padding-->
+        <div class = "md-toolbar-tools" id = "toggleNavViewButtonDiv" ng-controller="NavController">
+          <md-button class = "md-icon-button" ng-click="toggleLeft()" id="toggleNavViewButton">
+            <md-icon class = "headerButton">menu</md-icon>
+          </md-button>
+        </div>
+      <!--/md-content>
+    </div-->
+
+    <!-- ng-view for the rest of the content --->
+    <section ng-view></section>
 
 
   </body>

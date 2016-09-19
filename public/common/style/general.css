@@ -1,0 +1,13 @@
+#toggleNavViewButton .headerButton {
+    color: white;
+    font-size : 30px;
+    
+}
+
+#toggleNavViewButtonDiv {
+    z-index : 40;
+    position: fixed;    
+    min-height:64px;
+    margin-left: 5px;
+
+}
