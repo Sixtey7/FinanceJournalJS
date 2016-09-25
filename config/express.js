@@ -39,9 +39,9 @@ module.exports = function(db) {
   //Add in our routes
   require('../app/routes/index.server.routes.js')(app);
   require('../app/routes/entry.server.routes.js')(app);
+  require('../app/routes/account.server.routes.js')(app);
 
   //Add in the public directory for the angular stuff
-  //TODO: Turn this back on once I have angular stuff to show
   app.use(express.static('./public'));
 
   return server;

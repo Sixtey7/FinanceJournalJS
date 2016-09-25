@@ -10,7 +10,8 @@ module.exports = function() {
   var db = mongoose.connect(config.dbUri);
 
   console.log(('Connected to the database...').debug);
-  require('../app/models/entry.server.model')
+  require('../app/models/entry.server.model');
+  require('../app/models/account.server.model');
 
 
   return db;
