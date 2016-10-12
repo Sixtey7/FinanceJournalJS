@@ -1,0 +1,1 @@
+angular.module('accounts', ['ngMaterial', 'md.data.table']);

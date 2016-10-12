@@ -1,7 +1,7 @@
 var mainApplicationModuleName = "FinanceJournal";
 
 var mainApplicationModule = angular.module(mainApplicationModuleName,
-  ['ngResource', 'ngRoute', 'entries', 'general']);
+  ['ngResource', 'ngRoute', 'entries', 'accounts', 'general']);
 
 console.log('Inside applicationJS');
 
